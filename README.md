@@ -9,7 +9,7 @@ It is a containerized version of eBot, which is a full managed server-bot writte
 ### 2. Configure
 Run the setup script to configure the eBot. You can change the configuration in the setup.sh file.
 ```bash
-docker run -v ./:/data -w /app -it gymitpro/ebot-configure:latest ./setup.sh
+docker run -v ./:/data -it --rm gymitpro/ebot-configure:latest
 ```
 
 ### 3. Run

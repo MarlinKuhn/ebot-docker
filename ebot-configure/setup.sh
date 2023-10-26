@@ -64,8 +64,8 @@ sed -i -e "s#EBOT_ADMIN_LOGIN=.*#EBOT_ADMIN_LOGIN=${EBOT_ADMIN_LOGIN}#g" \
     "$(dirname "$0")/.env"
 
 printf "$green" "Now configuring IP"
-echo "We need to know on which IP the server will run, please fill in the IP of the server (public or lan) (format 192.168.X.X)"
-EBOT_IP=$(ask_with_default "Log address server" $EBOT_IP)
+echo "We need to know on which IP the eBot will run, please fill in the IP of the eBot (public or lan) (format 192.168.X.X)"
+EBOT_IP=$(ask_with_default "eBot IP" $EBOT_IP)
 LOG_ADDRESS_SERVER=http://${EBOT_IP}:12345
 
 sed -i -e "s#LOG_ADDRESS_SERVER=.*#LOG_ADDRESS_SERVER=${LOG_ADDRESS_SERVER}#g" \
@@ -73,3 +73,4 @@ sed -i -e "s#LOG_ADDRESS_SERVER=.*#LOG_ADDRESS_SERVER=${LOG_ADDRESS_SERVER}#g" \
     "$(dirname "$0")/.env"
 
 ./configure.sh
+./copy_data.sh
