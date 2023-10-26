@@ -9,9 +9,13 @@ if [ ! -f .installed ]; then
 
     php symfony cc
 
-    php symfony doctrine:build --all --no-confirmation
+    if [ "$DATABASE_EXISTS" != "1" ]; then
+      php symfony doctrine:build --all --no-confirmation
+      php symfony guard:create-user --is-super-admin $EBOT_ADMIN_EMAIL $EBOT_ADMIN_LOGIN $EBOT_ADMIN_PASSWORD
+    else
+      php symfony guard:change-password $EBOT_ADMIN_LOGIN $EBOT_ADMIN_PASSWORD
+    fi
 
-    php symfony guard:create-user --is-super-admin $EBOT_ADMIN_EMAIL $EBOT_ADMIN_LOGIN $EBOT_ADMIN_PASSWORD
 
     rm -rf web/installation
 

@@ -4,6 +4,7 @@ services:
         restart: always
         image: gymitpro/ebot-web:latest
         environment:
+            - DATABASE_EXISTS
             - EBOT_ADMIN_LOGIN
             - EBOT_ADMIN_PASSWORD
             - EBOT_ADMIN_EMAIL

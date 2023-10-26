@@ -42,24 +42,53 @@ NEW_WEBSOCKET_SECRET_KEY=$(generatePassword)
 sed -i -e "s#WEBSOCKET_SECRET_KEY=.*#WEBSOCKET_SECRET_KEY=${NEW_WEBSOCKET_SECRET_KEY}#g" \
     "$(dirname "$0")/.env"
 
+printf "$green" "MySQL confuguration"
+if yesNo "Do you have an existing MySQL database?"; then
+  printf "$red" "If you have an existing MySQL database, please put the /data folder inside the current folder"
+  if yesNo "Did you copy the data directory?"; then
+    if [ -d "/data/data" ]; then
+      printf "$green" "Existing data folder found!"
+    else
+      printf "$red" "Folder not found!"
+      exit 1
+    fi
+  fi
+fi
 
-printf "$magenta" "Generating new mysql password"
-NEW_MYSQL_ROOT_PASSWORD=$(generatePassword)
-NEW_MYSQL_PASSWORD=$(generatePassword)
+if [ -d "/data/data" ]; then
+    printf "$yellow" "You have to provide the existing mysql root password and the mysql user password."
+    NEW_MYSQL_ROOT_PASSWORD=$(ask_with_default "Existing MySQL root password" "")
+    NEW_MYSQL_PASSWORD=$(ask_with_default "Existing MySQL user password" "")
+    DATABASE_EXISTS=1
+else
+    printf "$magenta" "Creating new mysql password"
+    NEW_MYSQL_ROOT_PASSWORD=$(generatePassword)
+    NEW_MYSQL_PASSWORD=$(generatePassword)
+    NEW_MYSQL_ROOT_PASSWORD=$(ask_with_default "MySQL root password" $NEW_MYSQL_ROOT_PASSWORD)
+    NEW_MYSQL_PASSWORD=$(ask_with_default "MySQL user password" $NEW_MYSQL_PASSWORD)
+    printf "$green" "ROOT PASSWORD: $NEW_MYSQL_ROOT_PASSWORD"
+    printf "$green" "USER PASSWORD: $NEW_MYSQL_PASSWORD"
+    DATABASE_EXISTS=0
+fi
+
 sed -i -e "s#MYSQL_ROOT_PASSWORD=.*#MYSQL_ROOT_PASSWORD=${NEW_MYSQL_ROOT_PASSWORD}#g" \
     -e "s#MYSQL_PASSWORD=.*#MYSQL_PASSWORD=${NEW_MYSQL_PASSWORD}#g" \
+    -e "s#DATABASE_EXISTS=.*#DATABASE_EXISTS=${DATABASE_EXISTS}#g" \
     "$(dirname "$0")/.env"
 
 source .env
 
 printf "$green" "Now doing the default configuration of eBot web"
 
-EBOT_ADMIN_LOGIN=$(ask_with_default "eBot Web login" $EBOT_ADMIN_LOGIN)
+printf "$yellow" "eBot Web login: $EBOT_ADMIN_LOGIN"
 EBOT_ADMIN_PASSWORD=$(ask_with_default "eBot Web password" $EBOT_ADMIN_PASSWORD)
-EBOT_ADMIN_EMAIL=$(ask_with_default "eBot Web email" $EBOT_ADMIN_EMAIL)
+if [ "$DATABASE_EXISTS" != "1" ]; then
+  EBOT_ADMIN_EMAIL=$(ask_with_default "eBot Web email" $EBOT_ADMIN_EMAIL)
+else
+  printf "$yellow" "eBot Web email cannot be changed because the database already exists!"
+fi
 
-sed -i -e "s#EBOT_ADMIN_LOGIN=.*#EBOT_ADMIN_LOGIN=${EBOT_ADMIN_LOGIN}#g" \
-    -e "s#EBOT_ADMIN_PASSWORD=.*#EBOT_ADMIN_PASSWORD=${EBOT_ADMIN_PASSWORD}#g" \
+sed -i -e "s#EBOT_ADMIN_PASSWORD=.*#EBOT_ADMIN_PASSWORD=${EBOT_ADMIN_PASSWORD}#g" \
     -e "s#EBOT_ADMIN_EMAIL=.*#EBOT_ADMIN_EMAIL=${EBOT_ADMIN_EMAIL}#g" \
     "$(dirname "$0")/.env"
 
@@ -78,3 +107,6 @@ sed -i -e "s#LOG_ADDRESS_SERVER=.*#LOG_ADDRESS_SERVER=${LOG_ADDRESS_SERVER}#g" \
 printf "$green" "eBot installation done!"
 printf "$yellow" "You can start the eBot with the following command:"
 printf "$yellow" "docker-compose up -d"
+echo ""
+printf "$yellow" "You can stop the eBot with the following command:"
+printf "$yellow" "docker-compose down"
