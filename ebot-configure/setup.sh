@@ -32,21 +32,11 @@ function ask_with_default() {
 
 
 printf "$green" "eBot setup script"
-printf "This script will only configure the .env file. You must run or accept to run the ./configure.sh\r\n"
-
-
-if yesNo "Would you like to fresh the configs files by downloading recent configuration from github (main branch) ?"
-then
-  wget https://raw.githubusercontent.com/deStrO/eBot-CSGO-Web/master/config/app_user.yml.default -O ./etc/eBotWeb/app_user.yml
-  wget https://raw.githubusercontent.com/deStrO/eBot-CSGO-Web/master/config/databases.yml -O ./etc/eBotWeb/databases.yml
-  wget https://raw.githubusercontent.com/deStrO/eBot-CSGO/master/config/config.ini.smp -O ./etc/eBotSocket/config.ini
-fi
 
 function generatePassword() {
     openssl rand -hex 16
 }
 
-cp .env.sample .env
 printf "$magenta" "Generating new websocket secret"
 NEW_WEBSOCKET_SECRET_KEY=$(generatePassword)
 sed -i -e "s#WEBSOCKET_SECRET_KEY=.*#WEBSOCKET_SECRET_KEY=${NEW_WEBSOCKET_SECRET_KEY}#g" \
