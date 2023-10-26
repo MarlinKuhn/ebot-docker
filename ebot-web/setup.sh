@@ -1,5 +1,7 @@
 #!/bin/bash
 
+php wait_for_db.php
+
 # Check if the .installed file exists
 if [ ! -f .installed ]; then
 

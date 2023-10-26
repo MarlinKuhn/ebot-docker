@@ -8,6 +8,8 @@ services:
             - EBOT_ADMIN_LOGIN
             - EBOT_ADMIN_PASSWORD
             - EBOT_ADMIN_EMAIL
+            - MYSQL_DATABASE
+            - MYSQL_ROOT_PASSWORD
         volumes:
             - "eBotWebVolume:/app/eBot-CSGO-Web"
             - "./ebot-logs:/app/ebot-logs"

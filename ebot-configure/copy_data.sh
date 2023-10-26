@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # eBot configuration
-rf -rf /data/etc/
+rm -rf /data/etc/
 mkdir -p /data/etc/
 cp -r ./etc/ /data/
 cp .env /data/.env

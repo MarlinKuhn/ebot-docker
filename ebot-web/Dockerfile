@@ -19,7 +19,9 @@ RUN git clone https://github.com/deStrO/eBot-CSGO-Web.git temp
 RUN cp -n -R temp/* eBot-CSGO-Web && rm -rf temp
 
 COPY setup.sh .
+COPY wait_for_db.php .
 
 RUN chmod +x setup.sh
+RUN chmod +x wait_for_db.php
 
 CMD ["./setup.sh"]
