@@ -3,12 +3,6 @@
 # Check if the .installed file exists
 if [ ! -f .installed ]; then
 
-    git config --global http.sslverify false
-
-    git clone https://github.com/deStrO/eBot-CSGO-Web.git temp
-
-    cp -n -R temp/* eBot-CSGO-Web && rm -rf temp
-
     cd eBot-CSGO-Web
 
     sleep 30

@@ -1,9 +1,12 @@
 FROM creativeprojects/php-nodejs:7.4
 
-WORKDIR /app
 
-COPY ./setup.sh .
+RUN git clone https://github.com/deStrO/eBot-CSGO.git /app/eBot-CSGO
 
-RUN chmod +x setup.sh
+WORKDIR /app/eBot-CSGO
 
-CMD ["./setup.sh"]
+RUN npm install
+
+RUN composer install
+
+CMD ["php", "bootstrap.php"]

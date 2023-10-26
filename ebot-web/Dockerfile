@@ -10,6 +10,14 @@ RUN apt-get update && apt-get install -y --force-yes git && apt-get clean
 
 RUN echo 'date.timezone = Europe/Paris' >> /usr/local/etc/php/conf.d/timezone.ini
 
+RUN git config --global http.sslverify false
+
+RUN mkdir eBot-CSGO-Web
+
+RUN git clone https://github.com/deStrO/eBot-CSGO-Web.git temp
+
+RUN cp -n -R temp/* eBot-CSGO-Web && rm -rf temp
+
 COPY setup.sh .
 
 RUN chmod +x setup.sh

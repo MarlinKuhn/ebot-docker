@@ -1,8 +1,8 @@
 version: '3'
 services:
     ebot-web:
-        build:
-            context: ./ebot-web
+        restart: always
+        image: gymitpro/ebot-web:latest
         environment:
             - EBOT_ADMIN_LOGIN
             - EBOT_ADMIN_PASSWORD
@@ -13,28 +13,35 @@ services:
             - "./ebot-demos:/app/ebot-demos"
             - "./etc/eBotWeb/app_user.yml:/app/eBot-CSGO-Web/config/app_user.yml"
             - "./etc/eBotWeb/databases.yml:/app/eBot-CSGO-Web/config/databases.yml"
+        links:
+            - mysqldb
         depends_on:
             - mysqldb
     ebot-socket:
-        build:
-            context: ./ebot-socket
+        restart: always
+        image: gymitpro/ebot-socket:latest
         ports:
             - "12360:12360"
         volumes:
             - "./ebot-logs:/app/eBot-CSGO/logs"
             - "./ebot-demos:/app/eBot-CSGO/demos"
             - "./etc/eBotSocket/config.ini:/app/eBot-CSGO/config/config.ini"
+        links:
+            - mysqldb
+            - redis
         depends_on:
             - mysqldb
             - ebot-web
             - redis
     ebot-logs-receiver:
-        build:
-            context: ./ebot-logs-receiver
+        restart: always
+        image: gymitpro/ebot-logs-receiver:latest
         ports:
             - "12345:12345"
         volumes:
             - "./etc/eBotLogReceiver/config.json:/app/ebot-project/configs/config.json"
+        links:
+            - redis
         depends_on:
             - redis
     mysqldb:
@@ -61,6 +68,9 @@ services:
             - "80:80"
             - "443:443"
         restart: always
+        links:
+            - ebot-web
+            - ebot-socket
         depends_on:
             - ebot-web
             - mysqldb
