@@ -74,3 +74,7 @@ sed -i -e "s#LOG_ADDRESS_SERVER=.*#LOG_ADDRESS_SERVER=${LOG_ADDRESS_SERVER}#g" \
 
 ./configure.sh
 ./copy_data.sh
+
+printf "$green" "eBot installation done!"
+printf "$yellow" "You can start the eBot with the following command:"
+printf "$yellow" "docker-compose up -d"
