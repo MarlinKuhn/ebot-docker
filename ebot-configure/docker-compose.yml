@@ -2,7 +2,7 @@ version: '3'
 services:
     ebot-web:
         restart: always
-        image: gymitpro/ebot-web:latest
+        image: gymitpro/ebot-web:v1.0
         environment:
             - DATABASE_EXISTS
             - EBOT_ADMIN_LOGIN
@@ -22,7 +22,7 @@ services:
             - mysqldb
     ebot-socket:
         restart: always
-        image: gymitpro/ebot-socket:latest
+        image: gymitpro/ebot-socket:v1.0
         ports:
             - "12360:12360"
         volumes:
@@ -38,7 +38,7 @@ services:
             - redis
     ebot-logs-receiver:
         restart: always
-        image: gymitpro/ebot-logs-receiver:latest
+        image: gymitpro/ebot-logs-receiver:v1.0
         ports:
             - "12345:12345"
         volumes:
