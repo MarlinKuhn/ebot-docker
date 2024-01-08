@@ -17,6 +17,7 @@
 
   demo_download: true
 
+  websocket_url: http://127.0.0.1:12360
   ebot_ip: 192.168.1.1
   ebot_port: 12360
 
